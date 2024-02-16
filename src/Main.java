@@ -1,70 +1,93 @@
-import java.util.Scanner;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main implements Array {
+    private int[] array;
+
     public static void main(String[] args) {
-        private int flag = 0;
-        public void setFlag(int flag) {
-            this.flag = flag;
-        }
-        public int getFlag() {
-            return flag;
-        }
-        //-1 задание
-        System.out.println("введите длину масива");
-        int[] array = new int[length];
+        Main main = new Main();
+        main.createArray();
+        main.findElement();
+        main.insertElement();
+        main.deleteElement();
+        main.orderedArray();
+    }
+
+    public void createArray() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите длину массива");
+        int length = scanner.nextInt();
+        array = new int[length];
         Random random = new Random();
         for (int i = 0; i < length; i++) {
             array[i] = random.nextInt(100) + 1;
         }
         System.out.println("Массив: " + Arrays.toString(array));
-        //-2 задание
-        //поиск
-        System.out.println("введите элемент, которого нужно найти");
-        int elementToFind = scanner.nextInt(); // Пример: элемент, который нужно найти
-        for (int i = 0; i < length; i++) {
+    }
+
+    public void findElement() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите элемент, который нужно найти");
+        int elementToFind = scanner.nextInt();
+        for (int i = 0; i < array.length; i++) {
             if (array[i] == elementToFind) {
                 System.out.println("Элемент найден на позиции " + i);
-                break;
+                return;
             }
         }
-        // вставка
-        System.out.println("введите элемент, которого нужный нужно вставить");
-        int elementToInsert = scanner.nextInt();
-        System.out.println("укажите номер элемента, которого нужный нужно вставить");
-        int positionToInsert = scanner.nextInt();
-        array = insertElement(array, elementToInsert, positionToInsert);
-        System.out.println("Массив после вставки: " + Arrays.toString(array));
+        System.out.println("Элемент не найден");
+    }
 
-        System.out.println("введите позицию элемента, которого нужный нужно удалить");
+    public void insertElement() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите элемент, который нужно вставить");
+        int elementToInsert = scanner.nextInt();
+        System.out.println("Введите позицию для вставки");
+        int positionToInsert = scanner.nextInt();
+        if (positionToInsert < 0 || positionToInsert > array.length) {
+            System.out.println("Неверная позиция для вставки");
+            return;
+        }
+        int[] newArray = new int[array.length + 1];
+        for (int i = 0; i < positionToInsert; i++) {
+            newArray[i] = array[i];
+        }
+        newArray[positionToInsert] = elementToInsert;
+        for (int i = positionToInsert; i < array.length; i++) {
+            newArray[i + 1] = array[i];
+        }
+        array = newArray;
+        System.out.println("Массив после вставки: " + Arrays.toString(array));
+    }
+
+    public void deleteElement() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите позицию элемента, который нужно удалить");
         int positionToDelete = scanner.nextInt();
-        array = deleteElement(array, positionToDelete);
+        if (positionToDelete < 0 || positionToDelete >= array.length) {
+            System.out.println("Неверная позиция для удаления");
+            return;
+        }
+        int[] newArray = new int[array.length - 1];
+        for (int i = 0, j = 0; i < array.length; i++) {
+            if (i != positionToDelete) {
+                newArray[j++] = array[i];
+            }
+        }
+        array = newArray;
         System.out.println("Массив после удаления: " + Arrays.toString(array));
-        //3 задание
-        System.out.println("введите длину упорядоченного масива");
-        flag += 1;
+    }
+
+    public void orderedArray() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите длину упорядоченного массива");
+
         int[] orderedArray = new int[length];
         for (int i = 0; i < length; i++) {
             orderedArray[i] = i * 2;
         }
         System.out.println("Упорядоченный массив: " + Arrays.toString(orderedArray));
-    }
-
-
-    public static int[] insertElement(int[] array, int element, int position) {
-        int[] newArray = new int[array.length + 1];
-        System.arraycopy(array, 0, newArray, 0, position);
-        newArray[position] = element;
-        System.arraycopy(array, position, newArray, position + 1, array.length - position);
-        return newArray;
-    }
-
-    public static int[] deleteElement(int[] array, int position) {
-        int[] newArray = new int[array.length - 1];
-        System.arraycopy(array, 0, newArray, 0, position);
-        System.arraycopy(array, position + 1, newArray, position, array.length - position - 1);
-        return newArray;
     }
 }
 
